@@ -1178,24 +1178,33 @@ static void discovery_found_service(struct discovery_op *op,
 					struct gatt_db_attribute *attr,
 					uint16_t start, uint16_t end)
 {
+	struct bt_gatt_client *client = op->client;
 	/* Skip if service already active */
 	if (!gatt_db_service_get_active(attr)) {
+		DBG(client, "1");
 		/* Skip if there are no attributes */
-		if (end == start)
+		if (end == start) {
+			DBG(client, "2");
+		
 			gatt_db_service_set_active(attr, true);
-		else
+		} 
+		else {
+			DBG(client, "3");
 			queue_push_tail(op->pending_svcs, attr);
+		}
 
 		if (start < op->svc_first)
 			op->svc_first = start;
 		if (end > op->svc_last)
 			op->svc_last = end;
 	} else {
+		DBG(client, "4");
 		/* Remove from pending if active */
 		queue_remove(op->pending_svcs, attr);
 
 		remove_discov_range(op, start, end);
 	}
+	DBG(client, "5");
 
 	/* Update last handle */
 	if (end > op->last)
@@ -1276,6 +1285,7 @@ static void discover_secondary_cb(bool success, uint8_t att_ecode,
 					bt_gatt_result_service_count(result));
 
 	if (!discovery_parse_services(op, false, &iter)) {
+		DBG(client, "parse services fail");
 		success = false;
 		goto done;
 	}
