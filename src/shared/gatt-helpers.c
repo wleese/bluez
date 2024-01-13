@@ -19,14 +19,11 @@
 #include "lib/uuid.h"
 #include "src/shared/gatt-helpers.h"
 #include "src/shared/util.h"
+#include "src/log.h"
 
 #ifndef MIN
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
-
-#define DBG(_client, _format, arg...) \
-	gatt_log(_client, "[%p] %s:%s() " _format, _client, __FILE__, \
-		__func__, ## arg)
 
 struct bt_gatt_result {
 	uint8_t opcode;
