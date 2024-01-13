@@ -700,6 +700,7 @@ next:
 
 	discovery_op_unref(op);
 failed:
+	DBG(client, "in discover_incl_cb failed");
 	discovery_op_complete(op, false, att_ecode);
 }
 
@@ -910,6 +911,7 @@ failed:
 	success = false;
 
 done:
+	DBG(client, "in ext_prop_read_cb done");
 	discovery_op_complete(op, success, att_ecode);
 }
 
@@ -997,6 +999,7 @@ failed:
 	success = false;
 
 done:
+	DBG(client, "in discover_descs_cb done");
 	discovery_op_complete(op, success, att_ecode);
 }
 
@@ -1103,6 +1106,7 @@ failed:
 	success = false;
 
 done:
+	DBG(client, "in discover_chrcs_cb done");
 	discovery_op_complete(op, success, att_ecode);
 }
 
@@ -1295,6 +1299,7 @@ next:
 	success = false;
 
 done:
+	DBG(client, "in discover_secondary_cb");
 	discovery_op_complete(op, success, att_ecode);
 }
 
@@ -1361,6 +1366,7 @@ secondary:
 	success = false;
 
 done:
+	DBG(client, "in discover_primary_cb - done");
 	discovery_op_complete(op, success, att_ecode);
 }
 
@@ -1482,6 +1488,7 @@ static void db_hash_read_cb(bool success, uint8_t att_ecode,
 	if (hash && !memcmp(hash, value, len)) {
 		DBG(client, "DB Hash match: skipping discovery");
 		queue_remove_all(op->pending_svcs, NULL, NULL, NULL);
+		DBG(client, "in db_hash_read_db 1");
 		discovery_op_complete(op, true, 0);
 		return;
 	}
@@ -1500,7 +1507,7 @@ discover:
 		discover_all(op);
 		return;
 	}
-
+	DBG(client, "in db_hash_read_db 2");
 	discovery_op_complete(op, true, 0);
 }
 
