@@ -1007,6 +1007,7 @@ static void discover_chrcs_cb(bool success, uint8_t att_ecode,
 						struct bt_gatt_result *result,
 						void *user_data)
 {
+	
 	struct discovery_op *op = user_data;
 	struct bt_gatt_client *client = op->client;
 	struct bt_gatt_iter iter;
@@ -1018,8 +1019,10 @@ static void discover_chrcs_cb(bool success, uint8_t att_ecode,
 	char uuid_str[MAX_LEN_UUID_STR];
 	unsigned int chrc_count;
 	bool discovering;
+	DBG(client, "success 1: %d", success);
 
 	discovery_req_clear(client);
+	DBG(client, "success 2: %d", success);
 
 	if (!success) {
 		if (att_ecode == BT_ATT_ERROR_ATTRIBUTE_NOT_FOUND) {
