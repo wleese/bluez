@@ -1111,7 +1111,7 @@ failed:
 	success = false;
 
 done:
-	DBG(client, "in discover_chrcs_cb done");
+	DBG(client, "in discover_chrcs_cb done .. success = %d", success);
 	discovery_op_complete(op, success, att_ecode);
 }
 
