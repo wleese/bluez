@@ -1235,6 +1235,7 @@ bool gatt_db_service_set_active(struct gatt_db_attribute *attrib, bool active)
 bool gatt_db_service_get_active(struct gatt_db_attribute *attrib)
 {
 	if (!attrib)
+		DBG("No attrib");
 		return false;
 
 	return attrib->service->active;

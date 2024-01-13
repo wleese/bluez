@@ -456,6 +456,13 @@ static void discovery_op_complete(struct discovery_op *op, bool success,
 		struct gatt_db_attribute *attr = svc->data;
 		uint16_t start, end;
 
+
+		DBG(op->client, "success: %d; error: %u",
+			success, err);
+
+		DBG(op->client, "gatt_db_service_get_active: %d",
+			gatt_db_service_get_active(attr));
+
 		/* Leave active services if operation was aborted */
 		if ((!success && err == 0) && gatt_db_service_get_active(attr))
 			continue;
@@ -1324,6 +1331,7 @@ static void discover_primary_cb(bool success, uint8_t att_ecode,
 					bt_gatt_result_service_count(result));
 
 	if (!discovery_parse_services(op, true, &iter)) {
+		DBG(client, "!discovery_parse_services(op, true, &iter)");
 		success = false;
 		goto done;
 	}
