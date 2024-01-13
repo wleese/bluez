@@ -1031,6 +1031,7 @@ static void discover_chrcs_cb(bool success, uint8_t att_ecode,
 	}
 
 	if (!result || !bt_gatt_iter_init(&iter, result))
+		DBG(client, "!result || !bt_gatt_iter_init(&iter, result)");
 		goto failed;
 
 	chrc_count = bt_gatt_result_characteristic_count(result);
@@ -1038,6 +1039,7 @@ static void discover_chrcs_cb(bool success, uint8_t att_ecode,
 	DBG(client, "Characteristics found: %u", chrc_count);
 
 	if (chrc_count == 0)
+		DBG(client, "chrc_count == 0");
 		goto failed;
 
 	while (bt_gatt_iter_next_characteristic(&iter, &start, &end, &value,
@@ -1071,6 +1073,7 @@ next:
 
 		range = queue_peek_head(op->discov_ranges);
 		if (!range)
+			DBG(client, "!range");
 			goto failed;
 
 		client->discovery_req =
@@ -1095,6 +1098,7 @@ next:
 	 * the characteristics into the database as we proceed.
 	 */
 	if (!discover_descs(op, &discovering))
+		DBG(client, "!discover_descs");
 		goto failed;
 
 	if (discovering)
@@ -1103,6 +1107,7 @@ next:
 	goto done;
 
 failed:
+	DBG(client, "failed in discover_chrcs_cb");
 	success = false;
 
 done:
