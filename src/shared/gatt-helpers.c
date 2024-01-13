@@ -1041,11 +1041,13 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 	if (opcode == BT_ATT_OP_ERROR_RSP) {
 		att_ecode = process_error(pdu, length);
 		success = false;
+		DBG("failed in discover_included_cb 1");
 		goto failed;
 	}
 
 	if (opcode != BT_ATT_OP_READ_BY_TYPE_RSP || !pdu || length < 6) {
 		success = false;
+		DBG("failed in discover_included_cb 2");
 		goto failed;
 	}
 
@@ -1063,6 +1065,7 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 	if ((data_length != 8 && data_length != 6) ||
 						(length - 1) % data_length) {
 		success = false;
+		DBG("failed in discover_included_cb 3");
 		goto failed;
 	}
 
@@ -1070,6 +1073,7 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 									op);
 	if (!cur_result) {
 		success = false;
+		DBG("failed in discover_included_cb 4");
 		goto failed;
 	}
 
@@ -1079,6 +1083,7 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 		data = new_read_included(cur_result);
 		if (!data) {
 			success = false;
+			DBG("failed in discover_included_cb 5");
 			goto failed;
 		}
 
@@ -1094,6 +1099,7 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 	 */
 	if (last_handle < op->start_handle) {
 		success = false;
+		DBG("failed in discover_included_cb 6");
 		goto failed;
 	}
 
@@ -1114,12 +1120,14 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 			return;
 
 		success = false;
+		DBG("failed in discover_included_cb 7");
 		goto failed;
 	}
 
 	success = true;
 
 failed:
+	DBG("failed in discover_included_cb failed failed failed");
 	discovery_op_complete(op, success, att_ecode);
 }
 
