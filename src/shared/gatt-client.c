@@ -610,17 +610,21 @@ static void discover_incl_cb(bool success, uint8_t att_ecode,
 	discovery_req_clear(client);
 
 	if (!success) {
+		DBG(client, "no success in discover_incl_cb");
 		if (att_ecode == BT_ATT_ERROR_ATTRIBUTE_NOT_FOUND)
 			goto next;
 
+		DBG(client, "goto failed in discover_incl_cb");
 		goto failed;
 	}
 
 	if (!result || !bt_gatt_iter_init(&iter, result))
+		DBG(client, "!result || !bt_gatt_iter_init(&iter, result)");
 		goto failed;
 
 	includes_count = bt_gatt_result_included_count(result);
 	if (includes_count == 0)
+		DBG(client, "Included count 0");
 		goto failed;
 
 	DBG(client, "Included services found: %u", includes_count);
@@ -1026,6 +1030,7 @@ static void discover_chrcs_cb(bool success, uint8_t att_ecode,
 
 	if (!success) {
 		if (att_ecode == BT_ATT_ERROR_ATTRIBUTE_NOT_FOUND) {
+			DBG(client, "success 3 we made it!");
 			success = true;
 			goto next;
 		}
@@ -1181,15 +1186,11 @@ static void discovery_found_service(struct discovery_op *op,
 	struct bt_gatt_client *client = op->client;
 	/* Skip if service already active */
 	if (!gatt_db_service_get_active(attr)) {
-		DBG(client, "1");
 		/* Skip if there are no attributes */
 		if (end == start) {
-			DBG(client, "2");
-		
 			gatt_db_service_set_active(attr, true);
 		} 
 		else {
-			DBG(client, "3");
 			queue_push_tail(op->pending_svcs, attr);
 		}
 
@@ -1198,13 +1199,11 @@ static void discovery_found_service(struct discovery_op *op,
 		if (end > op->svc_last)
 			op->svc_last = end;
 	} else {
-		DBG(client, "4");
 		/* Remove from pending if active */
 		queue_remove(op->pending_svcs, attr);
 
 		remove_discov_range(op, start, end);
 	}
-	DBG(client, "5");
 
 	/* Update last handle */
 	if (end > op->last)
