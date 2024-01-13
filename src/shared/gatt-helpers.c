@@ -19,7 +19,7 @@
 #include "lib/uuid.h"
 #include "src/shared/gatt-helpers.h"
 #include "src/shared/util.h"
-#include "src/log.h"
+#include <stdio.h>
 
 #ifndef MIN
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -1042,13 +1042,13 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 	if (opcode == BT_ATT_OP_ERROR_RSP) {
 		att_ecode = process_error(pdu, length);
 		success = false;
-		DBG("failed in discover_included_cb 1");
+		printf("failed in discover_included_cb 1\n");
 		goto failed;
 	}
 
 	if (opcode != BT_ATT_OP_READ_BY_TYPE_RSP || !pdu || length < 6) {
 		success = false;
-		DBG("failed in discover_included_cb 2");
+		printf("failed in discover_included_cb 2\n");
 		goto failed;
 	}
 
@@ -1066,7 +1066,7 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 	if ((data_length != 8 && data_length != 6) ||
 						(length - 1) % data_length) {
 		success = false;
-		DBG("failed in discover_included_cb 3");
+		printf("failed in discover_included_cb 3\n");
 		goto failed;
 	}
 
@@ -1074,7 +1074,7 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 									op);
 	if (!cur_result) {
 		success = false;
-		DBG("failed in discover_included_cb 4");
+		printf("failed in discover_included_cb 4\n");
 		goto failed;
 	}
 
@@ -1084,7 +1084,7 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 		data = new_read_included(cur_result);
 		if (!data) {
 			success = false;
-			DBG("failed in discover_included_cb 5");
+			printf("failed in discover_included_cb 5\n");
 			goto failed;
 		}
 
@@ -1100,7 +1100,7 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 	 */
 	if (last_handle < op->start_handle) {
 		success = false;
-		DBG("failed in discover_included_cb 6");
+		printf("failed in discover_included_cb 6\n");
 		goto failed;
 	}
 
@@ -1121,14 +1121,14 @@ static void discover_included_cb(uint8_t opcode, const void *pdu,
 			return;
 
 		success = false;
-		DBG("failed in discover_included_cb 7");
+		printf("failed in discover_included_cb 7\n");
 		goto failed;
 	}
 
 	success = true;
 
 failed:
-	DBG("failed in discover_included_cb failed failed failed");
+	printf("failed in discover_included_cb failed failed failed\n");
 	discovery_op_complete(op, success, att_ecode);
 }
 
