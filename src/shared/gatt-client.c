@@ -1362,7 +1362,7 @@ static void discover_primary_cb(bool success, uint8_t att_ecode,
 		success = false;
 		goto done;
 	}
-	DBG(client, "discovery_parse_services success: %d", success);
+	DBG(client, "end primary discovery_parse_services success: %d", success);
 
 secondary:
 	/*
@@ -1375,6 +1375,7 @@ secondary:
 		DBG(client, "queue_isempty(op->pending_svcs)");
 		goto done;
 
+	DBG(client, "discover secondary");
 	/* Discover secondary services */
 	client->discovery_req = bt_gatt_discover_secondary_services(client->att,
 						NULL, op->start, op->end,
