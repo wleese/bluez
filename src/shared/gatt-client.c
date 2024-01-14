@@ -1352,6 +1352,7 @@ static void discover_primary_cb(bool success, uint8_t att_ecode,
 	if (!result || !bt_gatt_iter_init(&iter, result)) {
 		success = false;
 		DBG(client, "!result || !bt_gatt_iter_init(&iter, result)");
+		DBG(client, "result: ");
 		goto done;
 	}
 
