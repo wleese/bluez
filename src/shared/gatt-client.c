@@ -438,6 +438,9 @@ static void discovery_op_complete(struct discovery_op *op, bool success,
 {
 	const struct queue_entry *svc;
 
+	DBG(op->client, "method entry. success: %d; error: %u",
+	success, err);
+
 	op->success = success;
 
 	/* Read database hash if discovery has been successful */
@@ -1327,6 +1330,7 @@ static void discover_primary_cb(bool success, uint8_t att_ecode,
 	struct discovery_op *op = user_data;
 	struct bt_gatt_client *client = op->client;
 	struct bt_gatt_iter iter;
+	DBG(client, "discover_primary_cb entry success: %d", success);
 
 	discovery_req_clear(client);
 
@@ -1336,6 +1340,7 @@ static void discover_primary_cb(bool success, uint8_t att_ecode,
 		case BT_ATT_ERROR_ATTRIBUTE_NOT_FOUND:
 			success = true;
 			att_ecode = 0;
+			DBG(client, "BT_ATT_ERROR_ATTRIBUTE_NOT_FOUND");
 			goto secondary;
 		default:
 			DBG(client, "Primary service discovery failed."
@@ -1386,7 +1391,7 @@ secondary:
 	success = false;
 
 done:
-	DBG(client, "in discover_primary_cb - done");
+	DBG(client, "in discover_primary_cb - success: %d", success);
 	discovery_op_complete(op, success, att_ecode);
 }
 
@@ -1441,6 +1446,8 @@ done:
 static void discover_all(struct discovery_op *op)
 {
 	struct bt_gatt_client *client = op->client;
+
+	DBG(client, "primary all service discovery");
 
 	client->discovery_req = bt_gatt_discover_all_primary_services(
 							client->att, NULL,
@@ -1978,6 +1985,8 @@ static void process_service_changed(struct bt_gatt_client *client,
 	if (!op)
 		goto fail;
 
+	DBG(client, "process_service_changed");
+
 	client->discovery_req = bt_gatt_discover_primary_services(client->att,
 						NULL, start_handle, end_handle,
 						discover_primary_cb,
@@ -2176,6 +2185,8 @@ discover:
 		op->success = false;
 		goto done;
 	}
+
+	DBG(client, "gatt_client_init");
 
 	client->discovery_req = bt_gatt_discover_all_primary_services(
 							client->att, NULL,
