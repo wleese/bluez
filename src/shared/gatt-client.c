@@ -1357,6 +1357,7 @@ static void discover_primary_cb(bool success, uint8_t att_ecode,
 		success = false;
 		goto done;
 	}
+	DBG(client, "discovery_parse_services success: %d", success);
 
 secondary:
 	/*
@@ -1366,6 +1367,7 @@ secondary:
 	 * primary service on the device.
 	 */
 	if (queue_isempty(op->pending_svcs))
+		DBG(client, "queue_isempty(op->pending_svcs)");
 		goto done;
 
 	/* Discover secondary services */
@@ -1375,6 +1377,7 @@ secondary:
 						discovery_op_ref(op),
 						discovery_op_unref);
 	if (client->discovery_req)
+		DBG(client, "client->discovery_req");
 		return;
 
 	DBG(client, "Failed to start secondary service discovery");
