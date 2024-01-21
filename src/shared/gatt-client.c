@@ -441,6 +441,9 @@ static void discovery_op_complete(struct discovery_op *op, bool success,
 	DBG(op->client, "method entry. success: %d; error: %u",
 	success, err);
 
+	// remove this :D
+	err = 0;
+
 	op->success = success;
 
 	/* Read database hash if discovery has been successful */
