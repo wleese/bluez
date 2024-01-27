@@ -1026,7 +1026,7 @@ static void discover_chrcs_cb(bool success, uint8_t att_ecode,
 	char uuid_str[MAX_LEN_UUID_STR];
 	unsigned int chrc_count;
 	bool discovering;
-	DBG(client, "success 1: %d", success);
+	DBG(client, "success 1: %d, att_ecode: %u", success, att_ecode);
 
 	discovery_req_clear(client);
 	DBG(client, "success 2: %d", success);
@@ -1122,7 +1122,7 @@ failed:
 	success = false;
 
 done:
-	DBG(client, "in discover_chrcs_cb done .. success = %d", success);
+	DBG(client, "in discover_chrcs_cb done .. success = %d, att_ecode: %u", success, att_ecode);
 	discovery_op_complete(op, success, att_ecode);
 }
 
@@ -1439,6 +1439,7 @@ static void notify_client_ready(struct bt_gatt_client *client, bool success,
 	for (entry = queue_get_entries(client->clones); entry;
 							entry = entry->next) {
 		struct bt_gatt_client *clone = entry->data;
+		DBG(client, "notify clones");
 
 		notify_client_ready(clone, success, att_ecode);
 	}
