@@ -1412,6 +1412,7 @@ static void notify_client_ready(struct bt_gatt_client *client, bool success,
 							uint8_t att_ecode)
 {
 	const struct queue_entry *entry;
+	DBG(client, "entry");
 
 	client = bt_gatt_client_ref_safe(client);
 	if (!client)
@@ -1928,6 +1929,8 @@ static void service_changed_complete(struct discovery_op *op, bool success,
 	uint16_t end_handle = op->end;
 	const struct queue_entry *entry;
 
+	DBG(client, "entry");
+
 	client->in_svc_chngd = false;
 
 	if (!success && att_ecode != BT_ATT_ERROR_ATTRIBUTE_NOT_FOUND) {
@@ -1959,10 +1962,12 @@ static void service_changed_complete(struct discovery_op *op, bool success,
 		process_service_changed(client, next_sc_op->start_handle,
 							next_sc_op->end_handle);
 		free(next_sc_op);
+		DBG(client, "Process any queued events");
 		return;
 	}
 
 	if (register_service_changed(client))
+		DBG(client, "register_service_changed");
 		return;
 
 	DBG(client,
