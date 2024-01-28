@@ -1291,12 +1291,14 @@ static void read_by_type_cb(uint8_t opcode, const void *pdu,
 	uint16_t last_handle;
 
 	if (opcode == BT_ATT_OP_ERROR_RSP) {
+		printf("William BT_ATT_OP_ERROR_RSP\n");
 		att_ecode = process_error(pdu, length);
 		success = false;
 		goto done;
 	}
 
 	if (opcode != BT_ATT_OP_READ_BY_TYPE_RSP || !pdu) {
+		printf("William BT_ATT_OP_READ_BY_TYPE_RSP\n");
 		success = false;
 		att_ecode = 0;
 		goto done;
@@ -1304,12 +1306,14 @@ static void read_by_type_cb(uint8_t opcode, const void *pdu,
 
 	data_length = ((uint8_t *) pdu)[0];
 	if (((length - 1) % data_length)) {
+		printf("William ((length - 1) % data_length)\n");
 		success = false;
 		att_ecode = 0;
 		goto done;
 	}
 
 	if (!result_append(opcode, pdu + 1, length - 1, data_length, op)) {
+		printf("William !result_append(opcode, pdu + 1, length - 1, data_length, op)\n");
 		success = false;
 		att_ecode = 0;
 		goto done;
@@ -1322,6 +1326,7 @@ static void read_by_type_cb(uint8_t opcode, const void *pdu,
 	 * wrong. Let's stop search, otherwise we might enter infinite loop.
 	 */
 	if (last_handle < op->start_handle) {
+		printf("William last_handle < op->start_handle\n");
 		success = false;
 		goto done;
 	}
@@ -1329,6 +1334,7 @@ static void read_by_type_cb(uint8_t opcode, const void *pdu,
 	op->start_handle = last_handle + 1;
 
 	if (last_handle != op->end_handle) {
+		printf("William last_handle != op->end_handle\n");
 		uint8_t pdu[4 + get_uuid_len(&op->uuid)];
 
 		put_le16(op->start_handle, pdu);
@@ -1342,6 +1348,7 @@ static void read_by_type_cb(uint8_t opcode, const void *pdu,
 						async_req_unref);
 		if (op->id)
 			return;
+
 
 		success = false;
 		goto done;
